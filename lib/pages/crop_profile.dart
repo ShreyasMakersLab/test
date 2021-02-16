@@ -1,4 +1,4 @@
-import 'package:crop_planning_techm/pages/image_picker.dart';
+import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 import 'package:crop_planning_techm/widgets/widget_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

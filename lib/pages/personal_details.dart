@@ -1,4 +1,4 @@
-import 'package:crop_planning_techm/pages/image_picker.dart';
+import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 import 'package:crop_planning_techm/pages/location_details.dart';
 import 'package:crop_planning_techm/widgets/adjust_fab.dart';
 import 'package:crop_planning_techm/widgets/date_picker.dart';

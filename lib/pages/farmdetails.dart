@@ -1,5 +1,5 @@
 import 'package:crop_planning_techm/pages/choose_crops.dart';
-import 'package:crop_planning_techm/pages/image_picker.dart';
+import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 import 'package:crop_planning_techm/widgets/adjust_fab.dart';
 import 'package:crop_planning_techm/widgets/no_scaling_action.dart';
 import 'package:flutter/cupertino.dart';
