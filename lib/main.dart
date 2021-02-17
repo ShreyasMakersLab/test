@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           ),
 
         ),
-      home:LiveCropPage(),
+      home:PersonalDetails(),
 
     );
   }
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 
 
 
-
+// Transperency level
 // 100% — FF
 //
 // 95% — F2

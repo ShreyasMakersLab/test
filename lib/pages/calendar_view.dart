@@ -10,11 +10,12 @@ class _CalendarViewPageState extends State<CalendarViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Calendar'),
-      // ),
+      appBar: AppBar(
+        title: Text('Calendar'),
+      ),
       body: SafeArea(
         child: SfCalendar(
+
           headerHeight: 55,
           viewHeaderHeight: -1,
           allowedViews: <CalendarView>[
@@ -32,7 +33,7 @@ class _CalendarViewPageState extends State<CalendarViewPage> {
           
           headerStyle: CalendarHeaderStyle(
 
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Colors.white,
               textAlign: TextAlign.start,
               textStyle: Theme.of(context).textTheme.headline2),
           viewHeaderStyle: ViewHeaderStyle(
@@ -47,7 +48,7 @@ class _CalendarViewPageState extends State<CalendarViewPage> {
                     .headline3
                     .copyWith(color: Colors.black54),
               ),
-              showTrailingAndLeadingDates: false,
+              showTrailingAndLeadingDates: true,
               dayFormat: "EEE",
               appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
               showAgenda: false),
@@ -60,16 +61,16 @@ class _CalendarViewPageState extends State<CalendarViewPage> {
     List meetings = <Meeting>[];
     final DateTime today = DateTime.now();
     final DateTime startTime =
-        DateTime(2021, DateTime.january, 28, 9, 0, 0);
+        DateTime(2021, DateTime.february, 1, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(days: 3));
     meetings.add(Meeting(
         'Conference', startTime, endTime, const Color(0xFF0D98FF), false));
     meetings.add(Meeting(
-        'Second', DateTime(2021, DateTime.january, 24, 9, 0, 0), DateTime(2021, DateTime.january, 26, 9, 0, 0), const Color(0xFF0D98FF), false));
+        'Second', DateTime(2021, DateTime.february, 12, 9, 0, 0), DateTime(2021, DateTime.february, 18, 9, 0, 0), const Color(0xFF0D98FF), false));
     meetings.add(Meeting(
-        '3rd', DateTime(2021, DateTime.january, 19, 9, 0, 0), DateTime(2021, DateTime.january, 23, 9, 0, 0), const Color(0xFF0D98FF), false));
+        '3rd', DateTime(2021, DateTime.february, 15, 9, 0, 0), DateTime(2021, DateTime.february, 21, 9, 0, 0), const Color(0xFFC9512C), false));
     meetings.add(Meeting(
-        'MIDDLE', DateTime(2021, DateTime.january, 19, 9, 0, 0), DateTime(2021, DateTime.january, 21, 9, 0, 0), const Color(0xFFFF1919), false));
+        '4th', DateTime(2021, DateTime.february, 19, 9, 0, 0), DateTime(2021, DateTime.february, 25, 9, 0, 0), const Color(0xFF2BC51B), false));
 
     return meetings;
   }
