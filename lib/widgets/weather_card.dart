@@ -102,10 +102,10 @@ class _WeatherCardState extends State<WeatherCard> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    // constraints: BoxConstraints(
-                    //   maxHeight: 130,
-                    //   minWidth: 140
-                    // ),
+                    constraints: BoxConstraints(
+                      maxHeight: 130,
+                      minHeight: 120
+                    ),
                     child: ListView(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
