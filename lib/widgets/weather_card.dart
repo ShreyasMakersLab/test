@@ -1,8 +1,6 @@
-import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:crop_planning_techm/Models/weather_model.dart';
 import 'package:crop_planning_techm/services/weather_api_service.dart';
-
 import 'package:flutter/material.dart';
 
 class WeatherCard extends StatefulWidget {
@@ -34,7 +32,7 @@ class _WeatherCardState extends State<WeatherCard> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16.0, top: 8),
                       child: Text(
-                        "Tuesday 28",
+                        "${DateFormat.yMMMMd('en_US').format(DateTime.now())}  ",
                         style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
@@ -68,21 +66,25 @@ class _WeatherCardState extends State<WeatherCard> {
                           ],
                         ),
                         Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(""),
-                              Container(
-                                padding: EdgeInsets.all(6),
-                                child: Icon(
-                                  Icons.wb_sunny_outlined,
-                                  size: 54,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(""),
+                            Container(
+                              child: Image(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  'http://openweathermap.org/img/wn/${snapshot.data.weather[0].icon}@2x.png',
                                 ),
+                                height: 70,
+                                width: 70,
                               ),
-                              Text(
-                                "Wind ${snapshot.data.wind.speed} kmph",
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                            ])
+                            ),
+                            Text(
+                              "Wind ${snapshot.data.wind.speed} kmph",
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -112,7 +114,7 @@ class _WeatherCardState extends State<WeatherCard> {
                             context, "Sun", Icons.wb_sunny_rounded, "18", "27"),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
