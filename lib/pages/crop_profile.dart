@@ -128,15 +128,13 @@ class _CropProfileState extends State<CropProfile> {
                       Divider(
                         thickness: 2,
                       ),
-                      Padding(
+                      Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Container(
-                          margin: EdgeInsets.only(top: 16),
-                          height: 52,
-                          child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: <Widget>[...getList()]),
-                        ),
+                        margin: EdgeInsets.only(top: 16),
+                        height: 52,
+                        child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: <Widget>[...getList()]),
                       ),
                     ],
                   ),

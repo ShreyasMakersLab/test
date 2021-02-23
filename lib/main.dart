@@ -10,6 +10,7 @@ import 'package:crop_planning_techm/pages/farmdetails.dart';
 import 'package:crop_planning_techm/pages/live_crop_pages.dart';
 import 'package:crop_planning_techm/pages/location_details.dart';
 import 'package:crop_planning_techm/pages/personal_details.dart';
+import 'package:crop_planning_techm/services/weather_api_service.dart';
 import 'package:crop_planning_techm/themeData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
           ),
 
         ),
-      home:PersonalDetails(),
+      home:LiveCropPage(),
 
     );
   }

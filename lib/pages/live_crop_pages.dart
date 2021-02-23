@@ -1,6 +1,9 @@
 import 'package:crop_planning_techm/pages/calendar_view.dart';
 import 'package:crop_planning_techm/pages/crop_profile.dart';
+import 'package:crop_planning_techm/services/weather_api_service.dart';
+import 'package:crop_planning_techm/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
+
 
 class LiveCropPage extends StatefulWidget {
   @override
@@ -8,6 +11,9 @@ class LiveCropPage extends StatefulWidget {
 }
 
 class _LiveCropPageState extends State<LiveCropPage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +21,7 @@ class _LiveCropPageState extends State<LiveCropPage> {
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        toolbarHeight: 140,
+        toolbarHeight: 90,
         flexibleSpace: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,23 +70,23 @@ class _LiveCropPageState extends State<LiveCropPage> {
                   ],
                 ),
               ),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Text(
-                        "It might rain today ",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                    ),
-                    Image(
-                      image: AssetImage('images/rain.png'),
-                      height: MediaQuery.of(context).size.width / 8,
-                    ),
-                  ],
-                ),
-              )
+              // Container(
+              //   child: Row(
+              //     children: [
+              //       Padding(
+              //         padding: const EdgeInsets.only(left: 16),
+              //         child: Text(
+              //           "It might rain today ",
+              //           style: Theme.of(context).textTheme.headline4,
+              //         ),
+              //       ),
+              //       Image(
+              //         image: AssetImage('images/rain.png'),
+              //         height: MediaQuery.of(context).size.width / 8,
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),
@@ -101,6 +107,7 @@ class _LiveCropPageState extends State<LiveCropPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            WeatherCard(),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -351,3 +358,4 @@ Widget cropCardInfo(BuildContext context, String crop_image_url, String cropName
     ),
   );
 }
+
