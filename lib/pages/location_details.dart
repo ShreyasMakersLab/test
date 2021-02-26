@@ -1,6 +1,4 @@
 import 'package:crop_planning_techm/pages/farmdetails.dart';
-import 'package:crop_planning_techm/widgets/adjust_fab.dart';
-import 'package:crop_planning_techm/widgets/no_scaling_action.dart';
 import 'package:flutter/material.dart';
 
 class LocationDetails extends StatefulWidget {
@@ -41,7 +39,6 @@ class _LocationDetailsState extends State<LocationDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Form(
-
                 key: _formKey,
                 child: Column(
                   children: [
@@ -49,92 +46,92 @@ class _LocationDetailsState extends State<LocationDetails> {
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please select your state";
-                            }
-                            return null;
-                          },
-                          // onFieldSubmitted: (value) {
-                          //   if (_formKey.currentState.validate()) {}
-                          // },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            labelStyle: TextStyle(fontSize: 18),
-                            labelText: 'State',
-                          ),
-                         ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please select your state";
+                          }
+                          return null;
+                        },
+                        // onFieldSubmitted: (value) {
+                        //   if (_formKey.currentState.validate()) {}
+                        // },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          labelStyle: TextStyle(fontSize: 18),
+                          labelText: 'State',
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please select your district";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            labelStyle: TextStyle(
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please select your district";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          labelStyle: TextStyle(
 
-                                // color: Colors.black38,
+                              // color: Colors.black38,
 
-                                fontSize: 18),
-                            labelText: 'District',
-                          ),
-                          ),
+                              fontSize: 18),
+                          labelText: 'District',
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please select your division";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            labelStyle: TextStyle(
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please select your division";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          labelStyle: TextStyle(
 
-                                // color: Colors.black38,
+                              // color: Colors.black38,
 
-                                fontSize: 18),
-                            labelText: 'Division',
-                          ),
-                          ),
+                              fontSize: 18),
+                          labelText: 'Division',
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Please select your village";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            labelStyle: TextStyle(
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please select your village";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          labelStyle: TextStyle(
 
-                                // color: Colors.black38,
+                              // color: Colors.black38,
 
-                                fontSize: 18),
-                            labelText: 'Village',
-                          ),
-                         ),
+                              fontSize: 18),
+                          labelText: 'Village',
+                        ),
+                      ),
                     ),
                   ],
                 ),

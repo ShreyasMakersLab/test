@@ -1,38 +1,41 @@
 import 'package:flutter/material.dart';
 
-class AppTheme {
-  //
-  AppTheme._();
+Color _PrimaryColor = Color(0xFF18A558);
 
-  static final ThemeData lightTheme = ThemeData(
+ThemeData AppThemeData = ThemeData(
+  primaryColor: _PrimaryColor,
+  accentColor: Color(0xFF008827),
+  fontFamily: "Poppins",
 
-    appBarTheme: AppBarTheme(
-      color: Colors.green,
+  //AppBar Theme
+  appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(
+        size: 24,
         color: Colors.white,
       ),
-    ),
-    colorScheme: ColorScheme.light(
-      primary: Colors.white,
-      onPrimary: Colors.white,
-      primaryVariant: Colors.white38,
-      secondary: Colors.lightGreen,
-    ),
-    // cardTheme: CardTheme(
-    //   color: Colors.teal,
-    // ),
-    iconTheme: IconThemeData(
-      color: Colors.white,
-    ),
-    textTheme: TextTheme(
-      headline5: TextStyle(
-        color: Colors.white,
+      color: _PrimaryColor,
+      textTheme:
+          TextTheme(headline1: TextStyle(fontSize: 24.0, color: Colors.white))),
+  scaffoldBackgroundColor: Color(0xFFF1F1F1),
+
+  //Text Theme
+  textTheme: TextTheme(
+      headline2: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w600,
+          fontFamily: "Poppins",
+          color: Color(0xFF008827)),
+      headline3: TextStyle(
         fontSize: 20.0,
+        fontWeight: FontWeight.w500,
+        fontFamily: "Poppins",
+        color: Color(0xB3000000),
       ),
-      subtitle2: TextStyle(
-        color: Colors.black45,
-        fontSize: 18.0,
-      ),
-    ),
-  );
-}
+      headline4: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w200,
+          color: Color(0x99000000),
+          fontFamily: "Poppins Regular"),
+      headline5: TextStyle(
+          fontSize: 16.0, fontWeight: FontWeight.w100, color: Colors.black54)),
+);

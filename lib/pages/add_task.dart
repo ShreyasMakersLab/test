@@ -1,5 +1,3 @@
-import 'package:crop_planning_techm/widgets/adjust_fab.dart';
-import 'package:crop_planning_techm/widgets/no_scaling_action.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +10,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(
+      bottomNavigationBar: Container(
         padding: const EdgeInsets.all(8.0),
         width: double.infinity,
         child: FlatButton(
@@ -29,9 +27,6 @@ class _AddTaskState extends State<AddTask> {
           onPressed: () {},
         ),
       ),
-      floatingActionButtonLocation:
-          FixedCenterDockedFabLocation(context: context),
-      floatingActionButtonAnimator: NoScalingAnimation(),
       appBar: AppBar(
         title: Text(
           "Add Task",

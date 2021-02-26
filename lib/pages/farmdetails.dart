@@ -1,9 +1,8 @@
 import 'package:crop_planning_techm/pages/choose_crops.dart';
-import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
-import 'package:crop_planning_techm/widgets/adjust_fab.dart';
-import 'package:crop_planning_techm/widgets/no_scaling_action.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 
 class FarmDetails extends StatefulWidget {
   @override
@@ -27,12 +26,13 @@ class _FarmDetailsState extends State<FarmDetails> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             ImagePickerWidget(imagepickerpadding: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Form(
-
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,13 +63,14 @@ class _FarmDetailsState extends State<FarmDetails> {
                             Expanded(
                               flex: 3,
                               child: TextFormField(
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                   validator: (value) {
-                                     String patttern = r'(^[0-9]*$)';
-                                     RegExp regExp = new RegExp(patttern);
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  String patttern = r'(^[0-9]*$)';
+                                  RegExp regExp = new RegExp(patttern);
                                   if (value.isEmpty) {
                                     return "Please enter farm size";
-                                  }else if (!regExp.hasMatch(value)) {
+                                  } else if (!regExp.hasMatch(value)) {
                                     return "Farm size must be digits";
                                   }
                                   return null;
@@ -101,7 +102,8 @@ class _FarmDetailsState extends State<FarmDetails> {
                                           ),
                                           color: Colors.white,
                                           onPressed: () {
-                                            if (_formKey.currentState.validate()){}
+                                            if (_formKey.currentState
+                                                .validate()) {}
                                           }),
                                     )),
                               ),
@@ -178,7 +180,7 @@ class _FarmDetailsState extends State<FarmDetails> {
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          color:Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColor,
           onPressed: () {
             if (_formKey.currentState.validate()) {
               Navigator.push(

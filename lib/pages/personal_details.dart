@@ -1,9 +1,8 @@
-import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 import 'package:crop_planning_techm/pages/location_details.dart';
-import 'package:crop_planning_techm/widgets/adjust_fab.dart';
 import 'package:crop_planning_techm/widgets/date_picker.dart';
-import 'package:crop_planning_techm/widgets/no_scaling_action.dart';
 import 'package:flutter/material.dart';
+
+import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/image_picker.dart';
 
 enum Gender { Male, Female }
 
@@ -14,7 +13,6 @@ class PersonalDetails extends StatefulWidget {
 
 class _PersonalDetailsState extends State<PersonalDetails> {
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     ),
                     Container(
                       child: TextFormField(
-
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
@@ -126,11 +123,9 @@ class _GenderSelectionState extends State<GenderSelection> {
         Row(
           children: <Widget>[
             Radio(
-
                 value: Gender.Male,
                 groupValue: _character,
                 onChanged: (Gender value) {
-
                   setState(() {
                     _character = value;
                   });

@@ -1,7 +1,7 @@
-import 'package:intl/intl.dart';
 import 'package:crop_planning_techm/Models/weather_model.dart';
 import 'package:crop_planning_techm/services/weather_api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class WeatherCard extends StatefulWidget {
   @override
@@ -49,7 +49,7 @@ class _WeatherCardState extends State<WeatherCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${snapshot.data.weather[0].description}",
+                              "${snapshot.data.weather[0].description.capitalize()}",
                               style: Theme.of(context).textTheme.headline4,
                             ),
                             Text(
@@ -75,8 +75,8 @@ class _WeatherCardState extends State<WeatherCard> {
                                 image: NetworkImage(
                                   'http://openweathermap.org/img/wn/${snapshot.data.weather[0].icon}@2x.png',
                                 ),
-                                height: 70,
-                                width: 70,
+                                height: 66,
+                                width: 66,
                               ),
                             ),
                             Text(
@@ -93,24 +93,24 @@ class _WeatherCardState extends State<WeatherCard> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    constraints: BoxConstraints(maxHeight: 130, minHeight: 120),
+                    constraints: BoxConstraints(maxHeight: 120, minHeight: 120),
                     child: ListView(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Mon", Icons.wb_sunny_rounded, "18", "27"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Tue", Icons.wb_cloudy, "28", "27"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Wed", Icons.wb_shade, "9", "28"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Thu", Icons.wb_twighlight, "10", "37"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Fri", Icons.wb_sunny_rounded, "16", "27"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Sat", Icons.wb_sunny_rounded, "23", "21"),
-                        dailyTempWidget(
+                        dailyForecast(
                             context, "Sun", Icons.wb_sunny_rounded, "18", "27"),
                       ],
                     ),
@@ -120,19 +120,23 @@ class _WeatherCardState extends State<WeatherCard> {
             ),
           );
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          return Text("Unable To Fetch Data...");
         }
 
         // By default, show a loading spinner.
-        return CircularProgressIndicator();
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
 }
 
-Widget dailyTempWidget(BuildContext context, String day, IconData weatherIcon,
+Widget dailyForecast(BuildContext context, String day, IconData weatherIcon,
     String minTemp, String maxTemp) {
-  return Expanded(
+  return Align(
+    alignment: Alignment.topCenter,
     child: Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -164,4 +168,10 @@ Widget dailyTempWidget(BuildContext context, String day, IconData weatherIcon,
       ),
     ),
   );
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
 }

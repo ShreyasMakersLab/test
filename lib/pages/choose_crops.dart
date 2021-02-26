@@ -1,10 +1,5 @@
-
-import 'file:///E:/Flutter_projects/crop_planning_techm/lib/widgets/dropdown.dart';
-import 'package:crop_planning_techm/pages/add_crop.dart';
 import 'package:crop_planning_techm/pages/crop_info.dart';
-import 'package:crop_planning_techm/pages/crop_profile.dart';
-import 'package:crop_planning_techm/pages/live_crop_pages.dart';
-import 'package:crop_planning_techm/widgets/date_picker.dart';
+import 'package:crop_planning_techm/pages/homepage.dart';
 import 'package:crop_planning_techm/widgets/farm_selection_bottomsheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +23,7 @@ class _CropDetailsState extends State<CropDetails> {
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return SingleChildScrollView(
-
-              child: SelectFarmBottomSheet());
+          return SingleChildScrollView(child: SelectFarmBottomSheet());
         });
   }
 
@@ -56,55 +49,57 @@ class _CropDetailsState extends State<CropDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16, top: 8, bottom: 8),
+                    padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
                     child: Text('Select Crop:',
                         style: Theme.of(context).textTheme.headline2),
                   ),
-                    ListView(
-                      
-                      shrinkWrap: true,
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          onTap: _showBottomSheet,
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: Image.network(
-                                    'https://images.unsplash.com/photo-1519897831810-a9a01aceccd1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZmFybXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
-                                .image,
-                          ),
-                          title: Text('Crop 1',
-                              style: Theme.of(context).textTheme.headline3),
-                          // subtitle: Text('30 Acres'),
-                          trailing: GestureDetector(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>CropInfo())),
-                            child: Icon(
-                              Icons.info_outline_rounded,
-                              size: 30,
-                            ),
-                          ),
+                  ListView(
+                    shrinkWrap: true,
+                    children: [
+                      ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        onTap: _showBottomSheet,
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: Image.network(
+                                  'https://images.unsplash.com/photo-1519897831810-a9a01aceccd1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZmFybXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
+                              .image,
                         ),
-
-                        ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: Image.network(
-                              'https://images.unsplash.com/photo-1536657464919-892534f60d6e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTN8fGZhcm18ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                              fit: BoxFit.fill,
-                            ).image,
-                          ),
-                          title: Text('Crop 2',
-                              style: Theme.of(context).textTheme.headline3),
-                          // subtitle: Text('20 Acres'),
-                          trailing: Icon(
+                        title: Text('Crop 1',
+                            style: Theme.of(context).textTheme.headline3),
+                        // subtitle: Text('30 Acres'),
+                        trailing: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CropInfo())),
+                          child: Icon(
                             Icons.info_outline_rounded,
                             size: 30,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: Image.network(
+                            'https://images.unsplash.com/photo-1536657464919-892534f60d6e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTN8fGZhcm18ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                            fit: BoxFit.fill,
+                          ).image,
+                        ),
+                        title: Text('Crop 2',
+                            style: Theme.of(context).textTheme.headline3),
+                        // subtitle: Text('20 Acres'),
+                        trailing: Icon(
+                          Icons.info_outline_rounded,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -131,7 +126,7 @@ class _CropDetailsState extends State<CropDetails> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LiveCropPage()),
+                MaterialPageRoute(builder: (context) => Homepage()),
               );
             },
           ),

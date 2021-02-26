@@ -1,19 +1,14 @@
 import 'package:crop_planning_techm/pages/calendar_view.dart';
 import 'package:crop_planning_techm/pages/crop_profile.dart';
-import 'package:crop_planning_techm/services/weather_api_service.dart';
 import 'package:crop_planning_techm/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
 
-
-class LiveCropPage extends StatefulWidget {
+class Homepage extends StatefulWidget {
   @override
-  _LiveCropPageState createState() => _LiveCropPageState();
+  _HomepageState createState() => _HomepageState();
 }
 
-class _LiveCropPageState extends State<LiveCropPage> {
-
-
-
+class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -231,7 +226,8 @@ class _LiveCropPageState extends State<LiveCropPage> {
   }
 }
 
-Widget cropCardInfo(BuildContext context, String crop_image_url, String cropName) {
+Widget cropCardInfo(
+    BuildContext context, String crop_image_url, String cropName) {
   return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -358,4 +354,3 @@ Widget cropCardInfo(BuildContext context, String crop_image_url, String cropName
     ),
   );
 }
-
