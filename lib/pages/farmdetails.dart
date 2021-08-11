@@ -1,4 +1,6 @@
+import 'package:crop_planning_techm/Models/UserDataModels/farm_data.dart';
 import 'package:crop_planning_techm/pages/choose_crops.dart';
+import 'package:crop_planning_techm/services/task_db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +13,19 @@ class FarmDetails extends StatefulWidget {
 
 class _FarmDetailsState extends State<FarmDetails> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController farmController;
+  TextEditingController farmNameController = TextEditingController();
+  TextEditingController sizeController = TextEditingController();
+
+  List<FarmModel> farms;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _fetchFarmFromDB();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +54,11 @@ class _FarmDetailsState extends State<FarmDetails> {
                       Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: farmNameController,
+                          autovalidateMode: AutovalidateMode.disabled,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return "Please enter farm name";
+                              return "Please enter farm name or farm location";
                             }
                             return null;
                           },
@@ -63,8 +78,8 @@ class _FarmDetailsState extends State<FarmDetails> {
                             Expanded(
                               flex: 3,
                               child: TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
+                                controller: sizeController,
+                                autovalidateMode: AutovalidateMode.disabled,
                                 validator: (value) {
                                   String patttern = r'(^[0-9]*$)';
                                   RegExp regExp = new RegExp(patttern);
@@ -76,7 +91,6 @@ class _FarmDetailsState extends State<FarmDetails> {
                                   return null;
                                 },
                                 keyboardType: TextInputType.number,
-                                controller: farmController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18)),
@@ -103,7 +117,19 @@ class _FarmDetailsState extends State<FarmDetails> {
                                           color: Colors.white,
                                           onPressed: () {
                                             if (_formKey.currentState
-                                                .validate()) {}
+                                                .validate()) {
+                                              _insertFarmToDB();
+                                              _fetchFarmFromDB();
+
+                                              FocusScope.of(context).unfocus();
+                                              sizeController.clear();
+                                              farmNameController.clear();
+                                            }
+                                            //   sizeController.clear();
+                                            //   farmNameController.clear();
+                                            //   FocusScope.of(context)
+                                            //       .requestFocus(
+                                            //           new FocusNode());
                                           }),
                                     )),
                               ),
@@ -124,43 +150,43 @@ class _FarmDetailsState extends State<FarmDetails> {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text('Your Farms:',
-                        style: Theme.of(context).textTheme.headline2),
+                        style: Theme.of(context).textTheme.headline3),
                   ),
-                  ListView(
-                    shrinkWrap: true,
-                    children: [
-                      ListTile(
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.network(
-                                  'https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8ZmFybXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
-                              .image,
-                        ),
-                        title: Text(
-                          'Farm 1',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                        subtitle: Text('30 Acres'),
-                      ),
-                      // Divider(
-                      //   thickness: 1,
-                      // ),
-                      ListTile(
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.network(
-                            'https://images.unsplash.com/photo-1560493676-04071c5f467b?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8ZmFybXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                            fit: BoxFit.fill,
-                          ).image,
-                        ),
-                        title: Text(
-                          'Farm 2',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                        subtitle: Text('20 Acres'),
-                      ),
-                    ],
-                  ),
+                  farms != null
+                      ? ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: farms.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            return ListTile(
+                              // leading:
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child: Text(
+                                  farms[i]
+                                      .farmName
+                                      .substring(0, 2)
+                                      .toUpperCase(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                              title: Text(
+                                farms[i].farmName,
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                              subtitle:
+                                  Text(farms[i].farmSize.toString() + " Acres"),
+                            );
+                          },
+                          // Divider(
+                          //   thickness: 1,
+                          // ),
+                        )
+                      : Container(child: Text("No Farms")),
                 ],
               ),
             ),
@@ -171,26 +197,47 @@ class _FarmDetailsState extends State<FarmDetails> {
         padding: EdgeInsets.all(16),
         width: double.infinity,
         child: FlatButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ),
-          padding: EdgeInsets.all(14),
-          child: Text(
-            'NEXT',
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          color: Theme.of(context).primaryColor,
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+            padding: EdgeInsets.all(14),
+            child: Text(
+              'NEXT',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CropDetails()),
               );
-            }
-          },
-        ),
+            }),
       ),
     );
+  }
+
+  _insertFarmToDB() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final taskDBHelper = TaskDBHelper.instance;
+
+    FarmModel farm = FarmModel(
+        farmName: farmNameController.text,
+        farmSize: int.parse(sizeController.text));
+
+    final _res = await taskDBHelper.insertFarm(farm);
+    print("Farm inserted at ${_res}");
+  }
+
+  _fetchFarmFromDB() async {
+    final taskDBHelper = TaskDBHelper.instance;
+
+    List<FarmModel> _farms = await taskDBHelper.fetchFarms();
+    setState(() {
+      farms = _farms;
+    });
   }
 }

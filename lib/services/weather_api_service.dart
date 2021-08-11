@@ -1,13 +1,15 @@
-import 'package:crop_planning_techm/Models/weather_model.dart';
-import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:crop_planning_techm/Models/weather_model.dart';
+import 'package:http/http.dart' as http;
+
 String url =
-    'http://api.openweathermap.org/data/2.5/weather?q=pune&units=metric&appid=db66c78a5b437d17537bf3faf88e4418';
+    'https://api.openweathermap.org/data/2.5/onecall?lat=19.8762&lon=75.3433&units=metric&exclude=minutely,hourly&appid=5bf48301588e662cb1cee7422077ee54';
 
 class WeatherAPIService {
   Future<WeatherModel> fetchData() async {
-    http.Response data = await http.get(url);
+    http.Response data = await http.get(Uri.parse(url));
 
     if (data.statusCode == 200) {
       Map weatherData = jsonDecode(data.body);

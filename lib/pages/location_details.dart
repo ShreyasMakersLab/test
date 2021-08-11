@@ -1,5 +1,6 @@
 import 'package:crop_planning_techm/pages/farmdetails.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationDetails extends StatefulWidget {
   @override
@@ -9,6 +10,10 @@ class LocationDetails extends StatefulWidget {
 class _LocationDetailsState extends State<LocationDetails> {
   final _formKey = GlobalKey<FormState>();
   FocusNode myFocusnode;
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _districtController = TextEditingController();
+  TextEditingController _divisionController = TextEditingController();
+  TextEditingController _villageController = TextEditingController();
 
   @override
   void initState() {
@@ -20,6 +25,10 @@ class _LocationDetailsState extends State<LocationDetails> {
   @override
   void dispose() {
     myFocusnode.dispose();
+    _stateController.dispose();
+    _districtController.dispose();
+    _divisionController.dispose();
+    _villageController.dispose();
 
     super.dispose();
   }
@@ -45,6 +54,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
+                        controller: _stateController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -67,6 +77,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
+                        controller: _districtController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -90,6 +101,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
+                        controller: _divisionController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -113,6 +125,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                     Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
+                        controller: _villageController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -155,6 +168,7 @@ class _LocationDetailsState extends State<LocationDetails> {
           ),
           color: Theme.of(context).primaryColor,
           onPressed: () {
+            _setLocationDetails();
             if (_formKey.currentState.validate()) {
               Navigator.push(
                 context,
@@ -165,5 +179,40 @@ class _LocationDetailsState extends State<LocationDetails> {
         ),
       ),
     );
+  }
+
+  _setLocationDetails() async {
+    try {
+      /// Checks if shared preference exist
+      print("Shared Preference in Location Page");
+      Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await _prefs;
+      setState(() {
+        prefs.setString('state', _stateController.text);
+        prefs.setString('district', _districtController.text);
+        prefs.setString('division', _divisionController.text);
+        prefs.setString('village', _villageController.text);
+      });
+    } catch (err) {
+      /// setMockInitialValues initiates shared preference
+
+      SharedPreferences.setMockInitialValues({});
+      Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await _prefs;
+      setState(() {
+        prefs.setString('state', _stateController.text);
+        prefs.setString('district', _districtController.text);
+        prefs.setString('division', _divisionController.text);
+        prefs.setString('village', _villageController.text);
+      });
+    }
+
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    String _res = prefs.getString("state");
+    String _res2 = prefs.getString("district");
+    String _res3 = prefs.getString("village");
+
+    print(_res + " " + _res2 + " " + _res3);
   }
 }

@@ -4,7 +4,7 @@ Color _PrimaryColor = Color(0xFF18A558);
 
 ThemeData AppThemeData = ThemeData(
   primaryColor: _PrimaryColor,
-  accentColor: Color(0xFF008827),
+  accentColor: Color(0xFF62EC83),
   fontFamily: "Poppins",
 
   //AppBar Theme
@@ -16,7 +16,7 @@ ThemeData AppThemeData = ThemeData(
       color: _PrimaryColor,
       textTheme:
           TextTheme(headline1: TextStyle(fontSize: 24.0, color: Colors.white))),
-  scaffoldBackgroundColor: Color(0xFFF1F1F1),
+  scaffoldBackgroundColor: Color(0xFFF0F4F7),
 
   //Text Theme
   textTheme: TextTheme(

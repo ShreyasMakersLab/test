@@ -1,7 +1,15 @@
+import 'package:crop_planning_techm/Models/UserDataModels/crop_data.dart';
 import 'package:crop_planning_techm/pages/calendar_view.dart';
-import 'package:crop_planning_techm/pages/crop_profile.dart';
+import 'package:crop_planning_techm/pages/choose_crops.dart';
+import 'package:crop_planning_techm/pages/today_task.dart';
+import 'package:crop_planning_techm/pages/user_login.dart';
+import 'package:crop_planning_techm/services/task_db_helper.dart';
+import 'package:crop_planning_techm/widgets/CrpCardInfoWidget.dart';
+import 'package:crop_planning_techm/widgets/settings_page.dart';
 import 'package:crop_planning_techm/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -9,20 +17,66 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  String _username;
+  String _password;
+  List<CropModel> _crops;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    authenticateUser();
+
+    _fetchCropFromDB();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Future.delayed(Duration(milliseconds: 500), () async {
+    //   authenticateUser();
+    // });
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                "Prajwal Padal",
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              accountEmail: Text(
+                "prajwalpadal@gmail.com",
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
+            ListTile(
+              title: Text('Settings'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()));
+              },
+            ),
+            ListTile(
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        toolbarHeight: 90,
+        toolbarHeight: 80,
         flexibleSpace: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 48, right: 16, left: 16),
+                padding: const EdgeInsets.only(top: 40, right: 16, left: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -42,7 +96,7 @@ class _HomepageState extends State<Homepage> {
                                     fontSize: 24),
                           ),
                           TextSpan(
-                            text: "Sumit!",
+                            text: _username,
                             style: Theme.of(context)
                                 .appBarTheme
                                 .textTheme
@@ -51,37 +105,41 @@ class _HomepageState extends State<Homepage> {
                                     color: Color(0xB3000000),
                                     fontWeight: FontWeight.w600,
                                     fontFamily: "Poppins Regular",
-                                    fontSize: 40),
+                                    fontSize: 32),
                           )
                         ],
                       ),
                     ),
-                    CircleAvatar(
-                      child: Image(
-                        image: AssetImage('images/profile_avatar.png'),
-                        height: MediaQuery.of(context).size.width / 8,
+                    Container(
+                      padding: const EdgeInsets.only(left: 60, bottom: 8),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CalendarViewPage()));
+                          },
+                          icon: Icon(
+                            Icons.date_range,
+                            size: 32,
+                          )),
+                    ),
+                    Builder(
+                      builder: (context) => InkWell(
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: CircleAvatar(
+                          child: Image(
+                            image: AssetImage('images/profile_avatar.png'),
+                            height: MediaQuery.of(context).size.width / 8.5,
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              // Container(
-              //   child: Row(
-              //     children: [
-              //       Padding(
-              //         padding: const EdgeInsets.only(left: 16),
-              //         child: Text(
-              //           "It might rain today ",
-              //           style: Theme.of(context).textTheme.headline4,
-              //         ),
-              //       ),
-              //       Image(
-              //         image: AssetImage('images/rain.png'),
-              //         height: MediaQuery.of(context).size.width / 8,
-              //       ),
-              //     ],
-              //   ),
-              // )
             ],
           ),
         ),
@@ -96,261 +154,75 @@ class _HomepageState extends State<Homepage> {
             size: 48,
           ),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CropDetails()));
+          },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            WeatherCard(),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CropProfile()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Icon(Icons.schedule_rounded,
-                                      size: 28, color: Colors.black54),
-                                ),
-                                RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "5 Days to go for ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4),
-                                    TextSpan(
-                                        text: "Harvesting",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3)
-                                  ]),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          cropCardInfo(
-                              context,
-                              "https://images.unsplash.com/photo-1506917728037-b6af01a7d403?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80",
-                              "Pumpkin")
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              WeatherCard(),
+              TodaysTasks(
+                currDate:
+                    DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CropProfile()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Icon(Icons.schedule_rounded,
-                                      size: 28, color: Colors.black54),
-                                ),
-                                RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "10 Days to go for ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4),
-                                    TextSpan(
-                                        text: "Ploughing",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3)
-                                  ]),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          cropCardInfo(
-                              context,
-                              "https://images.unsplash.com/photo-1536500576323-b9a2af3a6c61?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-                              "Tomato")
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+              _crops != null
+                  ? ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: _crops.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return CropCard(cropData: _crops[i]);
+                      })
+                  : Container(
+                      child: Text("Unable to fetch Data"),
+                    )
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-Widget cropCardInfo(
-    BuildContext context, String crop_image_url, String cropName) {
-  return Container(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                flex: 2,
-                child: RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: '$cropName\n',
-                      style: Theme.of(context).textTheme.headline2),
-                  TextSpan(
-                      text: 'Farm 1\n',
-                      style: Theme.of(context).textTheme.headline4),
-                  TextSpan(
-                      text: 'Flowering Stage\n',
-                      style: Theme.of(context).textTheme.headline4),
-                  TextSpan(
-                      text: '3 days',
-                      style: Theme.of(context).textTheme.headline4),
-                ])),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 6,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.network(
-                      crop_image_url,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 8, left: 16, right: 8),
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CalendarViewPage()));
-                    },
-                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                    color: Theme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24)),
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.date_range,
-                            size: 24,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            'Show',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
-            Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 8, right: 16, left: 8),
-                  child: FlatButton(
-                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CropProfile()),
-                      );
-                    },
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.black87,
-                            width: 1,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(24)),
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.edit,
-                            size: 24,
-                            color: Colors.black87,
-                          ),
-                          Text(
-                            'Edit',
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
-          ],
-        )
-      ],
-    ),
-  );
+  _fetchCropFromDB() async {
+    final taskDBHelper = TaskDBHelper.instance;
+
+    List<CropModel> crops = await taskDBHelper.fetchCrops();
+    setState(() {
+      _crops = crops;
+    });
+    print(_crops[0].cropName);
+    print("crops fetched");
+  }
+
+  // _fetchUserData() async {
+  //   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  //   final SharedPreferences prefs = await _prefs;
+  //   setState(() {
+  //     _username = prefs.getString("username");
+  //     _password = prefs.getString("password");
+  //   });
+  //   print("name:- " + _username);
+  // }
+  //
+
+  authenticateUser() async {
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      _username = prefs.getString("username");
+      _password = prefs.getString("password");
+    });
+    print({"In Authenticate $_username $_password"});
+    if (_username != null) {
+      return null;
+    } else {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => UserLogin()));
+    }
+  }
 }

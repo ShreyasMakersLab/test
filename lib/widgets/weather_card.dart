@@ -3,6 +3,12 @@ import 'package:crop_planning_techm/services/weather_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+}
+
 class WeatherCard extends StatefulWidget {
   @override
   _WeatherCardState createState() => _WeatherCardState();
@@ -11,12 +17,60 @@ class WeatherCard extends StatefulWidget {
 class _WeatherCardState extends State<WeatherCard> {
   final WeatherAPIService weatherData = WeatherAPIService();
 
+  bool _dropDownWeather = false;
+  Widget selectedIcon = Icon(
+    Icons.keyboard_arrow_down,
+    size: 24,
+  );
+
+  List<Widget> dailyForecast(forecastData) {
+    List<Widget> forecastList = [];
+
+    for (var i = 0; i <= 6; i++) {
+      forecastList.add(Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+          ),
+          decoration: BoxDecoration(
+            // color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Column(
+            children: [
+              Text(
+                "${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.fromMillisecondsSinceEpoch(forecastData.daily[i].dt * 1000))}",
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              Image(
+                fit: BoxFit.fill,
+                image: NetworkImage(
+                  'http://openweathermap.org/img/wn/${forecastData.daily[i].weather[0].icon}@2x.png',
+                ),
+                height: 40,
+                width: 40,
+              ),
+              Text(
+                "${forecastData.daily[i].temp.max.toInt()}/${forecastData.daily[i].temp.min.toInt()}℃",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3
+                    .copyWith(fontSize: 14),
+              )
+            ],
+          ),
+        ),
+      ));
+    }
+    return forecastList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<WeatherModel>(
       future: weatherData.fetchData(),
       builder: (context, snapshot) {
-        print(snapshot.data);
         if (snapshot.hasData) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -27,14 +81,20 @@ class _WeatherCardState extends State<WeatherCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16.0, top: 8),
-                      child: Text(
-                        "${DateFormat.yMMMMd('en_US').format(DateTime.now())}  ",
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, right: 16, left: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${DateFormat('EEE d, MMM ').format(DateTime.fromMillisecondsSinceEpoch(snapshot.data.current.dt * 1000))}  ",
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        Text(
+                          "${snapshot.data.current.weather[0].description.capitalize()}",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                      ],
                     ),
                   ),
                   Divider(
@@ -49,18 +109,14 @@ class _WeatherCardState extends State<WeatherCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${snapshot.data.weather[0].description.capitalize()}",
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                            Text(
-                              "${snapshot.data.main.temp}℃",
+                              "${snapshot.data.current.temp}℃",
                               style: Theme.of(context)
                                   .textTheme
                                   .headline3
                                   .copyWith(fontSize: 40),
                             ),
                             Text(
-                              "Day ${snapshot.data.main.temp_max.toInt()}℃ • Night ${snapshot.data.main.temp_min.toInt()}℃",
+                              "Day ${snapshot.data.daily[0].temp.day.toInt()}℃ • Night ${snapshot.data.daily[0].temp.night.toInt()}℃",
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ],
@@ -68,19 +124,18 @@ class _WeatherCardState extends State<WeatherCard> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(""),
                             Container(
                               child: Image(
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
-                                  'http://openweathermap.org/img/wn/${snapshot.data.weather[0].icon}@2x.png',
+                                  'http://openweathermap.org/img/wn/${snapshot.data.current.weather[0].icon}@2x.png',
                                 ),
-                                height: 66,
-                                width: 66,
+                                height: 62,
+                                width: 62,
                               ),
                             ),
                             Text(
-                              "Wind ${snapshot.data.wind.speed} kmph",
+                              "Wind ${snapshot.data.current.wind_speed} kmph",
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ],
@@ -91,30 +146,42 @@ class _WeatherCardState extends State<WeatherCard> {
                   Divider(
                     thickness: 1,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    constraints: BoxConstraints(maxHeight: 120, minHeight: 120),
-                    child: ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        dailyForecast(
-                            context, "Mon", Icons.wb_sunny_rounded, "18", "27"),
-                        dailyForecast(
-                            context, "Tue", Icons.wb_cloudy, "28", "27"),
-                        dailyForecast(
-                            context, "Wed", Icons.wb_shade, "9", "28"),
-                        dailyForecast(
-                            context, "Thu", Icons.wb_twighlight, "10", "37"),
-                        dailyForecast(
-                            context, "Fri", Icons.wb_sunny_rounded, "16", "27"),
-                        dailyForecast(
-                            context, "Sat", Icons.wb_sunny_rounded, "23", "21"),
-                        dailyForecast(
-                            context, "Sun", Icons.wb_sunny_rounded, "18", "27"),
-                      ],
+                  Visibility(
+                    maintainState: true,
+                    visible: _dropDownWeather,
+                    child: Container(
+                      // padding: EdgeInsets.symmetric(horizontal: 8),
+                      constraints:
+                          BoxConstraints(maxHeight: 100, minHeight: 90),
+                      child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: dailyForecast(snapshot.data)),
                     ),
                   ),
+                  Align(
+                    child: IconButton(
+                      iconSize: 24,
+                      icon: selectedIcon,
+                      onPressed: () {
+                        setState(() {
+                          if (_dropDownWeather == false) {
+                            _dropDownWeather = true;
+                            selectedIcon = Icon(
+                              Icons.keyboard_arrow_up_outlined,
+                              size: 24,
+                            );
+                          } else {
+                            _dropDownWeather = false;
+                            selectedIcon = Icon(
+                              Icons.keyboard_arrow_down_outlined,
+                              size: 24,
+                            );
+                          }
+                        });
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
@@ -130,48 +197,5 @@ class _WeatherCardState extends State<WeatherCard> {
         );
       },
     );
-  }
-}
-
-Widget dailyForecast(BuildContext context, String day, IconData weatherIcon,
-    String minTemp, String maxTemp) {
-  return Align(
-    alignment: Alignment.topCenter,
-    child: Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      decoration: BoxDecoration(
-        // color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "${day}",
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-            ),
-            child: Icon(
-              weatherIcon,
-              size: 40,
-            ),
-          ),
-          Text(
-            "${minTemp}/${maxTemp}℃",
-            style: Theme.of(context).textTheme.headline3.copyWith(fontSize: 14),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }

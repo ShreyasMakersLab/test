@@ -1,4 +1,4 @@
-import 'package:crop_planning_techm/pages/personal_details.dart';
+import 'package:crop_planning_techm/pages/homepage.dart';
 import 'package:crop_planning_techm/themeData.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData,
       //This is entry point for any page in view.
-      home: PersonalDetails(),
+      home: Homepage(),
     );
   }
 }
